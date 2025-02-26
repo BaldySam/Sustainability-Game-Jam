@@ -24,7 +24,6 @@ public class WheelControl : MonoBehaviour
     private void Start()
     {
         WheelCollider = GetComponent<WheelCollider>();
-        OnAWD();
     }
 
     // Update is called once per frame
@@ -62,26 +61,5 @@ public class WheelControl : MonoBehaviour
                 motorized = false;
             }
         }
-    }
-
-    public void OnRWD()
-    {
-        rwd = true;
-        awd = false;
-        fwd = false;
-    }
-
-    public void OnAWD()
-    {
-        awd = true;
-        rwd = false;
-        fwd = false;
-    }
-
-    public void OnFWD()
-    {
-        fwd = true;
-        awd = false;
-        rwd = false;
     }
 }
