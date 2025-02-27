@@ -25,6 +25,11 @@ public class CarControl : MonoBehaviour
     WheelControl[] wheels;
     Rigidbody rigidBody;
 
+    public float charge = 20f;
+    public float maxCharge = 20f;
+    [SerializeField] private float chargeLossRate = 1f;
+    [SerializeField] private CustomSlider chargeSlider;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,12 +40,27 @@ public class CarControl : MonoBehaviour
 
         // Find all child GameObjects that have the WheelControl script attached
         wheels = GetComponentsInChildren<WheelControl>();
+        chargeSlider.maxValue = maxCharge;
     }
 
     // Update is called once per frame
     void Update()
     {
-        vInput = Input.GetAxisRaw("Vertical");
+        chargeSlider.currentValue = charge;
+
+        if(charge > 0)
+            vInput = Input.GetAxisRaw("Vertical");
+        else
+        {
+            charge = 0;
+            vInput = 0;
+        }
+        
+        if(charge > 0 && vInput != 0)
+        {
+            charge -= Time.deltaTime * chargeLossRate;
+        }
+
         hInput = Input.GetAxisRaw("Horizontal");
 
         // Calculate current speed in relation to the forward direction of the car
