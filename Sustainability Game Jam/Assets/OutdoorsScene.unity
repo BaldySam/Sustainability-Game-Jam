@@ -15341,8 +15341,8 @@ MonoBehaviour:
   scriptInteractions: 1
   cpuEvaluateRipples: 0
   customMaterial: {fileID: 0}
-  startSmoothness: 0.95
-  endSmoothness: 0.85
+  startSmoothness: 0.7500001
+  endSmoothness: 0.65000004
   smoothnessFadeStart: 100
   smoothnessFadeDistance: 500
   tessellation: 1
