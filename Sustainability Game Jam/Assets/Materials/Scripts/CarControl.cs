@@ -47,7 +47,8 @@ public class CarControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        steeringWheel.localEulerAngles = new Vector3(0, 0, -hInput * 90);
+        // steeringWheel.localEulerAngles = new Vector3(steeringWheel.localEulerAngles.x, steeringWheel.localEulerAngles.y, Mathf.Clamp(Mathf.SmoothStep(steeringWheel.localEulerAngles.z, -hInput * 90, Time.deltaTime * 5) , -90, 90));
+        steeringWheel.localEulerAngles = new Vector3(steeringWheel.localEulerAngles.x, steeringWheel.localEulerAngles.y, Quaternion.Slerp(steeringWheel.localRotation, Quaternion.Euler(0, 0, -hInput * 90), Time.deltaTime * 5).eulerAngles.z);
         chargeSlider.currentValue = charge;
 
         if(charge > 0)

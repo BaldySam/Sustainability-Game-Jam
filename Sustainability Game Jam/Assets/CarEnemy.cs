@@ -49,8 +49,9 @@ public class CarEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        hInput = Quaternion.LookRotation(player.transform.position - transform.position).eulerAngles.y - transform.rotation.eulerAngles.y;
+        hInput = (Quaternion.LookRotation(player.transform.position - transform.position).eulerAngles.y - transform.rotation.eulerAngles.y) / 10;
         hInput = Mathf.Clamp(hInput, -1, 1);
+        Debug.Log(hInput);
         distanceToPlayer = Vector3.Distance(new Vector3(player.transform.position.x, 0, player.transform.position.z), new Vector3(transform.position.x, 0, transform.position.z));
         if(forwardSpeed > distanceToPlayer)
         {
