@@ -27,6 +27,10 @@ public class CarEnemy : MonoBehaviour
     Rigidbody rigidBody;
     bool hitObject;
     public float time;
+    [SerializeField] private float teleportOffset;
+    [SerializeField] private float playerDistanceOffset;
+    public Terrain terrainCarIsIn;
+    public Terrain[] terrains;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +43,7 @@ public class CarEnemy : MonoBehaviour
 
         // Find all child GameObjects that have the WheelControl script attached
         wheels = GetComponentsInChildren<WheelControl>();
+        terrains = Terrain.activeTerrains;
     }
 
     // Update is called once per frame
@@ -46,6 +51,29 @@ public class CarEnemy : MonoBehaviour
     {
         hInput = Quaternion.LookRotation(player.transform.position - transform.position).eulerAngles.y - transform.rotation.eulerAngles.y;
         hInput = Mathf.Clamp(hInput, -1, 1);
+        distanceToPlayer = Vector3.Distance(new Vector3(player.transform.position.x, 0, player.transform.position.z), new Vector3(transform.position.x, 0, transform.position.z));
+        if(forwardSpeed > distanceToPlayer)
+        {
+            if(forwardSpeed - distanceToPlayer > 5)
+            {
+                vInput = -1;
+            }
+            else
+            {
+                vInput = 0;
+            }
+        }
+        else
+        {
+            vInput = 1;
+        }
+
+        if(distanceToPlayer > playerDistanceOffset)
+        {
+            TeleportToPlayer();
+        }
+
+        Debug.Log(hInput);
         ObstacleAvoidance();
         
 
@@ -94,6 +122,21 @@ public class CarEnemy : MonoBehaviour
                 wheel.WheelCollider.motorTorque = 0;
             }
         }
+    }
+
+    void TeleportToPlayer()
+    {
+        for(int i = 0; i < terrains.Length; i++)
+        {
+            Debug.Log(i);
+            if(transform.position.x >= terrains[i].transform.position.x && transform.position.x <= terrains[i].transform.position.x + terrains[i].terrainData.size.x && transform.position.z >= terrains[i].transform.position.z && transform.position.z <= terrains[i].transform.position.z + terrains[i].terrainData.size.z)
+            {
+                terrainCarIsIn = terrains[i];
+                break;
+            }
+        }
+
+        transform.position = new Vector3(player.transform.position.x - player.transform.forward.x * teleportOffset, terrainCarIsIn.SampleHeight(transform.position) + terrainCarIsIn.transform.position.y + 2, player.transform.position.z - player.transform.forward.z * teleportOffset);
     }
 
     void ObstacleAvoidance()
