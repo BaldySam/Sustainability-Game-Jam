@@ -29,6 +29,7 @@ public class CarControl : MonoBehaviour
     public float maxCharge = 20f;
     [SerializeField] private float chargeLossRate = 1f;
     [SerializeField] private CustomSlider chargeSlider;
+    [SerializeField] private Transform steeringWheel;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +47,7 @@ public class CarControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        steeringWheel.localEulerAngles = new Vector3(0, 0, -hInput * 90);
         chargeSlider.currentValue = charge;
 
         if(charge > 0)
@@ -55,7 +57,7 @@ public class CarControl : MonoBehaviour
             charge = 0;
             vInput = 0;
         }
-        
+
         if(charge > 0 && vInput != 0)
         {
             charge -= Time.deltaTime * chargeLossRate;
