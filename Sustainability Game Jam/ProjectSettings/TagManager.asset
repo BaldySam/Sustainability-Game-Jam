@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Terrain
   - Enemy
+  - Battery
+  - BatteryFinish
   layers:
   - Default
   - TransparentFX

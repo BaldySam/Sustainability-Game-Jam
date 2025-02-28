@@ -1,6 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CarControl : MonoBehaviour
 {
@@ -30,6 +29,8 @@ public class CarControl : MonoBehaviour
     [SerializeField] private float chargeLossRate = 1f;
     [SerializeField] private CustomSlider chargeSlider;
     [SerializeField] private Transform steeringWheel;
+    [SerializeField] private float recoverOffset = 3f;
+    float time;
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +48,25 @@ public class CarControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            LevelReset();
+        }
+
+        if(Input.GetKeyDown(KeyCode.R) && time == 0)
+        {
+            Recover();
+        }
+
+        if(time > 0)
+        {
+            time -= Time.deltaTime;
+        }
+        else
+        {
+            time = 0;
+        }
+
         // steeringWheel.localEulerAngles = new Vector3(steeringWheel.localEulerAngles.x, steeringWheel.localEulerAngles.y, Mathf.Clamp(Mathf.SmoothStep(steeringWheel.localEulerAngles.z, -hInput * 90, Time.deltaTime * 5) , -90, 90));
         steeringWheel.localEulerAngles = new Vector3(steeringWheel.localEulerAngles.x, steeringWheel.localEulerAngles.y, Quaternion.Slerp(steeringWheel.localRotation, Quaternion.Euler(0, 0, -hInput * 90), Time.deltaTime * 5).eulerAngles.z);
         chargeSlider.currentValue = charge;
@@ -111,5 +131,18 @@ public class CarControl : MonoBehaviour
                 wheel.WheelCollider.motorTorque = 0;
             }
         }
+    }
+
+    void LevelReset()
+    {
+        UnityEngine.SceneManagement.Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
+    }
+
+    void Recover()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y + recoverOffset, transform.position.z);
+        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        time = 3;
     }
 }
