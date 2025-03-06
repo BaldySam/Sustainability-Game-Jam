@@ -9,6 +9,7 @@ public class CustomSlider : MonoBehaviour
     public float minValue;
     public float currentValue;
     public Vector2 backgroundSize;
+    [SerializeField] GameObject fill;
     public Transform fillTransform;
     public Transform backgroundTransform;
     public bool updateBackgroundAtRuntime;
@@ -43,9 +44,14 @@ public class CustomSlider : MonoBehaviour
         {
             currentValue = maxValue;
         }
-        else if(currentValue < minValue)
+        else if(fill.activeInHierarchy == true && currentValue < minValue)
         {
-            currentValue = minValue;
+            fill.SetActive(false);
+        }
+        
+        if(fill.activeInHierarchy == false && currentValue > minValue)
+        {
+            fill.SetActive(true);
         }
     }
 

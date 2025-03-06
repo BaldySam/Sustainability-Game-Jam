@@ -6,7 +6,7 @@ public class Collectable : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<CarControl>().charge = other.gameObject.GetComponent<CarControl>().maxCharge;
+            other.gameObject.GetComponent<PlayerHealth>().playerCurrentCharge = other.gameObject.GetComponent<PlayerHealth>().playerMaxCharge;
             GameObject.FindGameObjectWithTag("BatteryFinish").GetComponent<BatteryFinish>().batteryCount--;
             Destroy(gameObject);
         }
